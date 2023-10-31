@@ -49,28 +49,7 @@ def user(user_id):
         return "Utilisateur non trouvé"
     else:
         return str(utilisateur)
-    
-@app.route("/login", methods=['POST'])
-def check_login():
 
-    mail = request.form.get('email')
-    password = request.form.get('password')
-    with app.app_context():
-        user = db.session.query(Utilisateur).filter_by(email=mail, password=password).first()
-    
-    if user is None:
-        return(json.dumps({"statut":0,"resultat":None}))
-    else:
-        jsonresult =json.dumps( {
-                "statut": 1,
-                "resultat": {
-                    "nom": user.nom,
-                    "prenom":user.prenom,
-                    "email":user.email,
-                    "userType":user.userType   
-                }
-                })
-        return(jsonresult)
 
 if __name__ == '__main__':
     app.run()
