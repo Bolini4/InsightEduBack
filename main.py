@@ -1,6 +1,6 @@
-from flask import Flask, request,jsonify
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData, Table,select
+from sqlalchemy import MetaData, insert
 
 import json
 
@@ -16,7 +16,25 @@ with app.app_context():
     metadata.reflect(bind=db.engine)
 
 #Init Objet <-> Tables mapping
-Utilisateur = metadata.tables['utilisateurs']
+class Utilisateur(db.Model):
+    __tablename__ = 'utilisateurs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nom = db.Column(db.String)
+    prenom = db.Column(db.String)
+    email = db.Column(db.String)
+    password = db.Column(db.String)
+    userType = db.Column(db.String)
+
+    def __init__(self, nom, prenom, email, password, userType):
+        self.nom = nom
+        self.prenom = prenom
+        self.email = email
+        self.password = password
+        self.userType = userType
+
+
+# Utilisateur = metadata.tables['utilisateurs']
 Competences = metadata.tables['competences']
 CompetencesUtilisateurs = metadata.tables['competencesutilisateurs']
 
@@ -71,6 +89,19 @@ def check_login():
                 }
                 })
         return(jsonresult)
+    
+@app.route("/addUser", methods=['POST'])
+def addUser():
+    print('addingUser')
+    with app.app_context():
+        new_user = Utilisateur(nom="tetsnom", prenom="tetsprenom", email="testemail", password="tetstpassword", userType="testUserType")
+        db.session.add(new_user)
+        db.session.commit()
+    print('shouldbedone')
+    return 'done'
+
+
+        
 
 if __name__ == '__main__':
     app.run()
