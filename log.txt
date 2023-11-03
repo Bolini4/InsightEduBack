@@ -1,0 +1,12 @@
+Python 3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import requests as r
+>>> url = "http://127.0.0.1:5000"
+>>> data = {'email':"matteobolini@gmail.com",'password':"hashedpass"}
+>>> response = r.post(url,data)
+>>> response.text
+'<!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n'
+>>> url = "http://127.0.0.1:5000/login"
+>>> response = r.post(url,data)
+>>> response.text
+'{"statut": 1, "resultat": {"nom": "bolini", "prenom": "matteo", "email": "matteobolini@gmail.com", "userType": "admin"}}'
