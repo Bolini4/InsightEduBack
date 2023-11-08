@@ -62,7 +62,9 @@ def index():
 @app.route('/user/<int:user_id>')
 def user(user_id):
     with app.app_context():
+        print("there")
         utilisateur = db.session.query(Utilisateur).filter_by(id=user_id).first()
+        print(utilisateur.nom)
     if utilisateur is None:
         return "Utilisateur non trouvé"
     else:
@@ -104,4 +106,4 @@ def addUser():
         
 
 if __name__ == '__main__':
-    app.run()
+    app.run(ssl_context=('cert.pem','key.pem'),port=50100)
