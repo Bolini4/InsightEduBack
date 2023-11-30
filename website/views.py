@@ -5,24 +5,17 @@ from . import db
 
 views = Blueprint('views',__name__)
 
-def return_users():
-    utilisateurs_data = db.session.query(Utilisateur).all()
-    result = ""
-    for utilisateur in utilisateurs_data:
-        result += f"{utilisateur}"
-    print(result)
-    return result
-
 
 @views.route('/')
 def index():
-    return(return_users())
+    return("coucou")
 
 @views.route('/user/<int:user_id>')
 def user(user_id):
     print("there")
     utilisateur = db.session.query(Utilisateur).filter_by(id=user_id).first()
     print(utilisateur.nom)
+    print(utilisateur.password)
     if utilisateur is None:
         return "Utilisateur non trouvé"
     else:
