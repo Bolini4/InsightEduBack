@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from flask_jwt_extended import jwt_required
 import json
 from .models import Utilisateur
 from . import db
@@ -6,7 +7,8 @@ from . import db
 views = Blueprint('views',__name__)
 
 
-@views.route('/')
+@views.route('/', methods=["POST","GET"])
+@jwt_required()
 def index():
     return("coucou")
 
