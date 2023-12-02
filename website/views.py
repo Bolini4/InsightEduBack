@@ -23,36 +23,5 @@ def user(user_id):
     else:
         return str(utilisateur.nom)
     
-@views.route("/login", methods=['POST'])
-def check_login():
 
-    mail = request.form.get('email')
-    password = request.form.get('password')
-    with app.app_context():
-        user = db.session.query(Utilisateur).filter_by(email=mail, password=password).first()
-    
-    if user is None:
-        return(json.dumps({"statut":0,"resultat":None}))
-    else:
-        jsonresult =json.dumps( {
-                "statut": 1,
-                "resultat": {
-                    "nom": user.nom,
-                    "prenom":user.prenom,
-                    "email":user.email,
-                    "userType":user.userType   
-                }
-                })
-        return(jsonresult)
-    
 
-    
-@views.route("/addUser", methods=['POST'])
-def addUser():
-    print('addingUser')
-    with app.app_context():
-        new_user = Utilisateur(nom="tetsnom", prenom="tetsprenom", email="testemail", password="tetstpassword", userType="testUserType")
-        db.session.add(new_user)
-        db.session.commit()
-    print('shouldbedone')
-    return 'done'
