@@ -1,8 +1,21 @@
-import requests as rtemp
+import requests as r
 
-url = "http://127.0.0.1:5000/auth/login"
-data = {'email':"matteobolini@gmail.com",
-        'password':'hashedpass'}
-req = r.post(url,data)
+print("Press 1 for Login test")
+print("Press 2 for logout test")
+choice = int(input("1 or 2"))
+
+if choice == 1:
+    
+        url = "http://127.0.0.1:5000/auth/login"
+        data = {'email':"matteobolini@gmail.com",
+                'password':'hashedpass'}
+        req = r.post(url,data)
+        print(req.text)
+elif choice == 2:
+        url = "http://127.0.0.1:5000/auth/logout"
+        data = {'email':"matteobolini@gmail.com",
+                'password':'hashedpass'}
+        req = r.post(url,data)
+        print(req.text)       
 
 input("press enter to exit")

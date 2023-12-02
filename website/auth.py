@@ -1,6 +1,6 @@
-from flask import Blueprint, request, redirect,url_for
+from flask import Blueprint, request, jsonify
 from .models import Utilisateur
-from flask_jwt_extended import create_access_token 
+from flask_jwt_extended import create_access_token, unset_jwt_cookies
 from . import db
 
 auth = Blueprint('auth',__name__)
@@ -16,15 +16,21 @@ def login():
         
         if utilisateur:
             if password == utilisateur.password:
+                access_token = create_access_token(identity=email)
+                response = {"access_token":access_token}
                 print("Loggin success")
             else:
+                response = "BAD"
                 print("incorrect Password")
 
-    return('loginpage')
+    return(response)
 
 @auth.route('/logout',methods=['GET','POST'])
 def logout():
-    return('logoutPage')
+    response = jsonify({"msg":"logout_success"})
+    unset_jwt_cookies(response)
+    print("coucou")
+    return(response)
 
 @auth.route('/signup',methods=['GET','POST'])
 def signup():
