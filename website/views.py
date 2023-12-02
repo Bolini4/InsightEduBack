@@ -10,7 +10,7 @@ views = Blueprint('views',__name__)
 @views.route('/', methods=["POST","GET"])
 @jwt_required()
 def index():
-    return("coucou")
+    return("coucouLogged")
 
 @views.route('/user/<int:user_id>')
 def user(user_id):

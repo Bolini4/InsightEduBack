@@ -2,10 +2,11 @@ import json
 
 from flask import Blueprint, request, jsonify
 from .models import Utilisateur
-from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt_identity, get_jwt
+from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt_identity, get_jwt,jwt_required
 from datetime import datetime, timedelta, timezone
 from . import db
 
+blacklist = set()
 auth = Blueprint('auth',__name__)
 
 
@@ -29,10 +30,16 @@ def login():
     return(response)
 
 @auth.route('/logout',methods=['GET','POST'])
+@jwt_required()
 def logout():
     response = jsonify({"msg":"logout_success"})
+    print(response)
     unset_jwt_cookies(response)
-    print("coucou")
+    jti = get_jwt()["jti"]
+    blacklist.add(jti)
+    print(jti)
+    print("coucoulogout")
+    print(blacklist)
     return(response)
 
 @auth.route('/signup',methods=['GET','POST'])

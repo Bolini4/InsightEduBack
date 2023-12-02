@@ -14,10 +14,13 @@ if choice == 1:
         req = r.post(url,data)
         print(req.text)
 elif choice == 2:
+        headers = {
+    "Authorization": f"Bearer {token}"
+}
         url = "http://127.0.0.1:5000/auth/logout"
         data = {'email':"matteobolini@gmail.com",
                 'password':'hashedpass'}
-        req = r.post(url,data)
+        req = r.post(url,headers=headers)
         print(req.text)
 elif choice == 3:
         headers = {
