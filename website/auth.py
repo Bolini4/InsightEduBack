@@ -38,18 +38,14 @@ def login():
 
     return(response)
 
-@auth.route('/logout',methods=['GET','POST'])
+@auth.route("/logout", methods=["POST"])
 @jwt_required()
 def logout():
-    response = jsonify({"msg":"logout_success"})
-    print(response)
-    unset_jwt_cookies(response)
     jti = get_jwt()["jti"]
-    blacklist.add(jti)
-    print(jti)
-    print("coucoulogout")
-    print(blacklist)
-    return(response)
+    now = datetime.now(timezone.utc)
+    db.session.add(TokenBlocklist(id=None,jti=jti, created_at=now))
+    db.session.commit()
+    return jsonify(msg="Access token revoked")
 
 @auth.route('/signup',methods=['GET','POST'])
 def signup():
