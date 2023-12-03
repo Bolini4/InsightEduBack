@@ -2,13 +2,22 @@ import json
 
 from flask import Blueprint, request, jsonify
 from .models import Utilisateur
-from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt_identity, get_jwt,jwt_required
+from .models import TokenBlocklist
+from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt_identity, get_jwt,jwt_required,JWTManager
 from datetime import datetime, timedelta, timezone
 from . import db
+from . import jwt
 
 blacklist = set()
 auth = Blueprint('auth',__name__)
 
+
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
+    jti = jwt_payload["jti"]
+    token = db.session.query(TokenBlocklist.id).filter_by(jti=jti).scalar()
+
+    return token is not None
 
 @auth.route('/login', methods=['GET','POST'])
 def login():

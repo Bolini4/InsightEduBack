@@ -2,7 +2,13 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 import json
 from .models import Utilisateur
+from .models import TokenBlocklist
 from . import db
+
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
+
 
 views = Blueprint('views',__name__)
 
@@ -22,6 +28,16 @@ def user(user_id):
         return "Utilisateur non trouvé"
     else:
         return str(utilisateur.nom)
+
+#TO CLEAR
+@views.route('/test')
+def test():
+    value = "tokenExample"
+    time = datetime.now(timezone.utc)
+    db.session.add(TokenBlocklist(id=None,jti=value,created_at=time))
+    db.session.commit()
+    return("added to db")
+
     
 
 
