@@ -10,13 +10,15 @@ class Utilisateur(db.Model):
     email = db.Column(db.String)
     password = db.Column(db.String)
     userType = db.Column(db.String)
+    token = db.Column(db.String)
 
-    def __init__(self, nom, prenom, email, password, userType):
+    def __init__(self, nom, prenom, email, password, userType, token):
         self.nom = nom
         self.prenom = prenom
         self.email = email
         self.password = password
         self.userType = userType
+        self.token = token
 
 class TokenBlocklist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
