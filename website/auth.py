@@ -30,6 +30,10 @@ def login():
         if utilisateur:
             if password == utilisateur.password:
                 access_token = create_access_token(identity=email)
+                print(access_token)
+                userToLog = Utilisateur.query.filter_by(email=email).first()
+                userToLog.token = access_token
+                db.session.commit()
                 response = {"access_token":access_token}
                 print("Loggin success")
             else:
