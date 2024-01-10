@@ -30,8 +30,8 @@ def login():
         if utilisateur:
             if password == utilisateur.password:
                 access_token = create_access_token(identity=email)
-                print(access_token)
                 userToLog = Utilisateur.query.filter_by(email=email).first()
+                print(userToLog)
                 userToLog.token = access_token
                 db.session.commit()
                 response = {"access_token":access_token}
@@ -46,7 +46,17 @@ def login():
 @jwt_required()
 def logout():
     jti = get_jwt()["jti"]
+    token = request.headers.get("Authorization")
     now = datetime.now(timezone.utc)
+    parts = token.split(' ')
+    if len(parts) == 2 and parts[0].lower() == 'bearer':
+        jwt_token = parts[1]
+        print(jwt_token)
+    else:
+        print("La chaîne ne commence pas par 'Bearer'")
+    user = Utilisateur.query.filter_by(token=jwt_token).first()
+    print(user)
+    user.token = None
     db.session.add(TokenBlocklist(id=None,jti=jti, created_at=now))
     db.session.commit()
     return jsonify(msg="Access token revoked")
