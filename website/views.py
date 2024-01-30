@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt,jwt_required,JWTManager
 import json
 from .models import Utilisateur
 from .models import TokenBlocklist
@@ -29,6 +29,22 @@ def user(user_id):
     else:
         return str(utilisateur.nom)
 
+
+@views.route('/getIdUser', methods=["GET"])
+@jwt_required()
+def getIdUser():
+    jti = get_jwt()["jti"]
+    token = request.headers.get("Authorization")
+    now = datetime.now(timezone.utc)
+    parts = token.split(' ')
+    if len(parts) == 2 and parts[0].lower() == 'bearer':
+        jwt_token = parts[1]
+        print(jwt_token)
+    else:
+        print("La chaîne ne commence pas par 'Bearer'")
+    user = Utilisateur.query.filter_by(token=jwt_token).first()
+    print(user.id)
+    return(str(user.id))
 #TO CLEAR
 @views.route('/test')
 def test():
