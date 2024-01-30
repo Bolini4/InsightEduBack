@@ -57,6 +57,9 @@ def logout():
     user = Utilisateur.query.filter_by(token=jwt_token).first()
     print(user)
     user.token = None
+    print(user.email)
+
+    #Two lines under are for blackliting token.
     db.session.add(TokenBlocklist(id=None,jti=jti, created_at=now))
     db.session.commit()
     return jsonify(msg="Access token revoked")

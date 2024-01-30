@@ -5,14 +5,14 @@ print("Press 2 for logout test")
 print("Press 3 for jwt required test")
 choice = int(input("1 or 2 or 3"))
 
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNDg3OTA5NiwianRpIjoiNDI0MDk3YTItN2Y0OS00N2ExLWE5ZjgtM2Q3NjRiNDA0YjViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImJvbGluZXR0ZW1haWxAZ29vZ2xlLmNvbSIsIm5iZiI6MTcwNDg3OTA5NiwiZXhwIjoxNzA0ODgyNjk2fQ.nePrt07a84HkcVxpt_uV_7WLDEdncOE-kUJzjPbHh3Q"
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjYxODc3MCwianRpIjoiZGVjOTcxMmQtYzgwZC00MDM1LTlkNzMtMWE4N2RiNDA3Zjg0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Im1hdHRlb2JvbGluaUBnbWFpbC5jb20iLCJuYmYiOjE3MDY2MTg3NzAsImV4cCI6MTcwNjYyMjM3MH0.GgkmM5kH1li_nUIDK_VM-P8CUGohLnF0IjfpFAYDGY0"
 
 
 if choice == 1:
     
         url = "http://127.0.0.1:5000/auth/login"
-        data = {'email':"bolinettemail@google.com",
-                'password':'password'}
+        data = {'email':"matteobolini@gmail.com",
+                'password':'hashedpass'}
         req = r.post(url,data)
         print(req.text)
 elif choice == 2:
@@ -20,8 +20,8 @@ elif choice == 2:
     "Authorization": f"Bearer {token}"
 }
         url = "http://127.0.0.1:5000/auth/logout"
-        data = {'email':"bolinettemail@google.com",
-                'password':'password'}
+        data = {'email':"matteobolini@gmail.com",
+                'password':'hashedpass'}
         req = r.post(url,headers=headers)
         print(req.text)
 elif choice == 3:

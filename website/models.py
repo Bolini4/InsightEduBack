@@ -29,3 +29,14 @@ class TokenBlocklist(db.Model):
         self.id = id
         self.jti = jti
         self.created_at = created_at
+
+class Competences(db.Model):
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    nomCompetence = db.Column(db.String)
+    idGroupeCompetences = db.Column(db.Integer)
+
+    def __init__(self, id, nomCompetence, idGroupeCompetences):
+        self.id = id
+        self.nomCompetence = nomCompetence
+        self.idGroupeCompetences = idGroupeCompetences
+        
