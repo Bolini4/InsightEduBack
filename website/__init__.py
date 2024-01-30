@@ -1,13 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 
 db = SQLAlchemy()
+jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/projetisfec'
     db.init_app(app)
+    jwt.init_app(app)
+    app.config["JWT_SECRET_KEY"] ="need_to_be_changed"
+
+
+    ACCESS_EXPIRES = timedelta(hours=1)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
+
     
 
     
