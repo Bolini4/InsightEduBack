@@ -38,7 +38,7 @@ def login():
 
         utilisateur = Utilisateur.query.filter_by(email=email).first()#Au moment de la création de compte il faudra faire attention au fait que l'on ai que 1 fois ce mail
         if utilisateur is None:
-            return "User not found", 200
+            return "User not found", 403
         if utilisateur:
             if utilisateur.token is None:
                 print(utilisateur.token)
