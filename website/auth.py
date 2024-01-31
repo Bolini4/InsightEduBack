@@ -28,25 +28,35 @@ def login():
         # password = request.form.get("password")
 
         data = request.get_json()
+        print(data)
         email = data["email"]
         password = data["password"]
 
+        if not email:
+            return "Email is missing", 400
 
 
         utilisateur = Utilisateur.query.filter_by(email=email).first()#Au moment de la création de compte il faudra faire attention au fait que l'on ai que 1 fois ce mail
-        
+        if utilisateur is None:
+            return "User not found", 200
         if utilisateur:
             if utilisateur.token is None:
+                print(utilisateur.token)
                 if password == utilisateur.password:
                     access_token = create_access_token(identity=email)
+                    print(access_token)
                     userToLog = Utilisateur.query.filter_by(email=email).first()
+                    print(userToLog)
                     userToLog.token = access_token
                     db.session.commit()
                     response = {"access_token":access_token}
+                    print("Loggin success")
                 else:
                     response = "BAD"
+                    print("incorrect Password")
             else:
                 response = utilisateur.token
+    print(response)
     return(response)
 
 @auth.route("/logout", methods=["POST"])
