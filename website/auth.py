@@ -19,27 +19,34 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
 
     return token is not None
 
-@auth.route('/login', methods=['GET','POST'])
+@auth.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get("email")
-        password = request.form.get("password")
+
+        #For testing purposes with requests python
+        # email = request.form.get("email")
+        # password = request.form.get("password")
+
+        data = request.get_json()
+        email = data["email"]
+        password = data["password"]
+
+
 
         utilisateur = Utilisateur.query.filter_by(email=email).first()#Au moment de la création de compte il faudra faire attention au fait que l'on ai que 1 fois ce mail
         
         if utilisateur:
-            if password == utilisateur.password:
-                access_token = create_access_token(identity=email)
-                userToLog = Utilisateur.query.filter_by(email=email).first()
-                print(userToLog)
-                userToLog.token = access_token
-                db.session.commit()
-                response = {"access_token":access_token}
-                print("Loggin success")
+            if utilisateur.token is None:
+                if password == utilisateur.password:
+                    access_token = create_access_token(identity=email)
+                    userToLog = Utilisateur.query.filter_by(email=email).first()
+                    userToLog.token = access_token
+                    db.session.commit()
+                    response = {"access_token":access_token}
+                else:
+                    response = "BAD"
             else:
-                response = "BAD"
-                print("incorrect Password")
-
+                response = utilisateur.token
     return(response)
 
 @auth.route("/logout", methods=["POST"])

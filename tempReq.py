@@ -6,12 +6,12 @@ print("Press 3 for jwt required test")
 print("Press 4 for getIdUser test")
 choice = int(input("1 or 2 or 3 or 4"))
 
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjYyMDEzMiwianRpIjoiMjg1NThhY2YtOTE3Yy00M2M3LTg3ZTItYTg0YjM1ZTc0ZGZmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Im1hdHRlb2JvbGluaUBnbWFpbC5jb20iLCJuYmYiOjE3MDY2MjAxMzIsImV4cCI6MTcwNjYyMzczMn0.3fDaXAH3FYHjkjAyrN7ERqEQJk_HkRgQ2QCLYpKb2cQ"
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjcwNTgyNCwianRpIjoiNDNjNjk2NWEtZGIzNy00YmZhLWIyNDUtN2FkNmNlYTQ3Mzg5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Im1hdHRlb2JvbGluaUBnbWFpbC5jb20iLCJuYmYiOjE3MDY3MDU4MjQsImV4cCI6MTcwNjcwOTQyNH0.OD0oZby0uzFvjVOkDco0x7KWsNvLN3tPRC3a3pfPlUY"
 
 
 if choice == 1:
     
-        url = "http://127.0.0.1:5000/auth/login"
+        url = "http://10.40.208.74:5000/auth/login"
         data = {'email':"matteobolini@gmail.com",
                 'password':'hashedpass'}
         req = r.post(url,data)
