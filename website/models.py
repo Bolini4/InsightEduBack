@@ -1,4 +1,5 @@
 from . import db
+import datetime
 
 
 class Utilisateur(db.Model):
@@ -46,6 +47,7 @@ class CompetencesUtilisateurs(db.Model):
     idUtilisateur = db.Column(db.Integer, db.ForeignKey('utilisateurs.id'), primary_key=True)
     idCompetence = db.Column(db.Integer, db.ForeignKey('competences.id'), primary_key=True)
     avancementCompetences = db.Column(db.Integer)
+    edited_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __init__(self, idUtilisateur, idCompetence, avancementCompetences):
         self.idUtilisateur = idUtilisateur
