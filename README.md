@@ -356,20 +356,13 @@ CREATE TABLE `competences` (
 
 La table `competencesutilisateurs` stocke les informations sur les compétences associées à chaque utilisateur, ainsi que leur niveau d'avancement. Voici la structure de la table :
 ```sql
-CREATE TABLE `competencesutilisateurs` (
-  `idUtilisateur` INT NOT NULL,
-  `idCompetence` INT NOT NULL,
-  `avancementCompetences` INT NOT NULL,
-  PRIMARY KEY (`idUtilisateur`, `idCompetence`),
-  CONSTRAINT `fk_competencesutilisateurs_utilisateurs`
-    FOREIGN KEY (`idUtilisateur`)
-    REFERENCES `utilisateurs` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_competencesutilisateurs_competences`
-    FOREIGN KEY (`idCompetence`)
-    REFERENCES `competences` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+CREATE TABLE competencesutilisateurs (
+  idUtilisateur INT NOT NULL,
+  idCompetence INT NOT NULL,
+  avancementCompetences INT NOT NULL,
+  edited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (idUtilisateur, idCompetence),
+  FOREIGN KEY (idUtilisateur) REFERENCES utilisateurs(id),
+  FOREIGN KEY (idCompetence) REFERENCES competences(id)
 );
 ```
