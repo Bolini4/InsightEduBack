@@ -39,4 +39,15 @@ class Competences(db.Model):
         self.id = id
         self.nomCompetence = nomCompetence
         self.idGroupeCompetences = idGroupeCompetences
-        
+    
+class CompetencesUtilisateurs(db.Model):
+    __tablename__ = 'competencesutilisateurs'
+
+    idUtilisateur = db.Column(db.Integer, db.ForeignKey('utilisateurs.id'), primary_key=True)
+    idCompetence = db.Column(db.Integer, db.ForeignKey('competences.id'), primary_key=True)
+    avancementCompetences = db.Column(db.Integer)
+
+    def __init__(self, idUtilisateur, idCompetence, avancementCompetences):
+        self.idUtilisateur = idUtilisateur
+        self.idCompetence = idCompetence
+        self.avancementCompetences = avancementCompetences
