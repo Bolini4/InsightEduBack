@@ -1,59 +1,77 @@
-from flask import Blueprint, request
-from flask_jwt_extended import get_jwt,jwt_required,JWTManager
-import json
-from .models import Utilisateur
-from .models import TokenBlocklist
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import get_jwt, jwt_required, JWTManager
+from .models import Utilisateur, TokenBlocklist
 from . import db
-
-from datetime import datetime
-from datetime import timedelta
-from datetime import timezone
-
+from datetime import datetime, timedelta, timezone
 
 views = Blueprint('views',__name__)
 
-
-@views.route('/', methods=["POST","GET"])
+# Récupérer tous les utilisateurs
+@views.route('/utilisateurs', methods=['GET'])
 @jwt_required()
-def index():
-    return("coucouLogged")
+def get_users():
+    utilisateurs = Utilisateur.query.all()
+    result = []
+    for utilisateur in utilisateurs:
+        result.append({
+            'id': utilisateur.id,
+            'nom': utilisateur.nom,
+            'prenom': utilisateur.prenom,
+            'email': utilisateur.email,
+            'userType': utilisateur.userType
+        })
+    return jsonify(result)
 
-@views.route('/user/<int:user_id>')
-def user(user_id):
-    print("there")
-    utilisateur = db.session.query(Utilisateur).filter_by(id=user_id).first()
-    print(utilisateur.nom)
-    print(utilisateur.password)
-    if utilisateur is None:
-        return "Utilisateur non trouvé"
-    else:
-        return str(utilisateur.nom)
-
-
-@views.route('/getIdUser', methods=["GET"])
+# Récupérer un utilisateur par son ID
+@views.route('/utilisateurs/<int:user_id>', methods=['GET'])
 @jwt_required()
-def getIdUser():
-    jti = get_jwt()["jti"]
-    token = request.headers.get("Authorization")
-    now = datetime.now(timezone.utc)
-    parts = token.split(' ')
-    if len(parts) == 2 and parts[0].lower() == 'bearer':
-        jwt_token = parts[1]
-        print(jwt_token)
-    else:
-        print("La chaîne ne commence pas par 'Bearer'")
-    user = Utilisateur.query.filter_by(token=jwt_token).first()
-    print(user.id)
-    return(str(user.id))
-#TO CLEAR
-@views.route('/test')
-def test():
-    value = "tokenExample"
-    time = datetime.now(timezone.utc)
-    db.session.add(TokenBlocklist(id=None,jti=value,created_at=time))
+def get_user(user_id):
+    utilisateur = Utilisateur.query.get_or_404(user_id)
+    result = {
+        'id': utilisateur.id,
+        'nom': utilisateur.nom,
+        'prenom': utilisateur.prenom,
+        'email': utilisateur.email,
+        'userType': utilisateur.userType
+    }
+    return jsonify(result)
+
+# Ajouter un nouvel utilisateur
+@views.route('/utilisateurs', methods=['POST'])
+@jwt_required()
+def add_user():
+    data = request.get_json()
+    new_user = Utilisateur(
+        nom=data['nom'],
+        prenom=data['prenom'],
+        email=data['email'],
+        password=data['password'],
+        userType=data['userType'],
+        token=None
+    )
+    db.session.add(new_user)
     db.session.commit()
-    return("added to db")
+    return jsonify({'message': 'Nouvel utilisateur ajouté'})
 
-    
+# Mettre à jour un utilisateur
+@views.route('/utilisateurs/<int:user_id>', methods=['PUT'])
+@jwt_required()
+def update_user(user_id):
+    data = request.get_json()
+    utilisateur = Utilisateur.query.get_or_404(user_id)
+    utilisateur.nom = data['nom']
+    utilisateur.prenom = data['prenom']
+    utilisateur.email = data['email']
+    utilisateur.password = data['password']
+    utilisateur.userType = data['userType']
+    db.session.commit()
+    return jsonify({'message': 'Utilisateur mis à jour'})
 
-
+# Supprimer un utilisateur
+@views.route('/utilisateurs/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    utilisateur = Utilisateur.query.get_or_404(user_id)
+    db.session.delete(utilisateur)
+    db.session.commit()
+    return jsonify({'message': 'Utilisateur supprimé'})
