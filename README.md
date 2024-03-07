@@ -307,3 +307,69 @@ Exemple de réponse :
 }
 ```
 Si l'access token n'est pas sur le point d'expirer, le serveur renvoie la réponse d'origine.
+
+
+# SQL
+
+La base de données utilisée pour cette application est MySQL. Voici les différentes tables utilisées dans l'application :
+
+## Table `utilisateurs`
+
+La table `utilisateurs` stocke les informations sur les utilisateurs de l'application. Voici la structure de la table :
+```sql
+CREATE TABLE `utilisateurs` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(255) NOT NULL,
+  `prenom` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `userType` VARCHAR(255) NOT NULL,
+  `token` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+);
+```
+## Table `token_blocklist`
+
+La table `token_blocklist` stocke les jetons d'authentification révoqués pour empêcher leur réutilisation. Voici la structure de la table :
+```sql
+CREATE TABLE `token_blocklist` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `jti` VARCHAR(36) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `jti` (`jti`)
+);
+```
+## Table `competences`
+
+La table `competences` stocke les informations sur les compétences disponibles dans l'application. Voici la structure de la table :
+```sql
+CREATE TABLE `competences` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nomCompetence` VARCHAR(255) NOT NULL,
+  `idGroupeCompetences` INT DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+## Table `competencesutilisateurs`
+
+La table `competencesutilisateurs` stocke les informations sur les compétences associées à chaque utilisateur, ainsi que leur niveau d'avancement. Voici la structure de la table :
+```sql
+CREATE TABLE `competencesutilisateurs` (
+  `idUtilisateur` INT NOT NULL,
+  `idCompetence` INT NOT NULL,
+  `avancementCompetences` INT NOT NULL,
+  PRIMARY KEY (`idUtilisateur`, `idCompetence`),
+  CONSTRAINT `fk_competencesutilisateurs_utilisateurs`
+    FOREIGN KEY (`idUtilisateur`)
+    REFERENCES `utilisateurs` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_competencesutilisateurs_competences`
+    FOREIGN KEY (`idCompetence`)
+    REFERENCES `competences` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+```
