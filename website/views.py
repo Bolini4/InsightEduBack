@@ -6,6 +6,9 @@ from datetime import datetime, timedelta, timezone
 
 views = Blueprint('views',__name__)
 
+@views.route('/test', methods=['GET'])
+def test():
+    return jsonify({'message': 'Test success'})
 # Récupérer tous les utilisateurs
 @views.route('/utilisateurs', methods=['GET'])
 @jwt_required()
