@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+  app:
+    build: .
+    environment:
+      DATABASE_URI: mysql+pymysql://myuser:mypassword@db/mydb
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
